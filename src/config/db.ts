@@ -10,7 +10,6 @@ export const connectDB = async () => {
     }
     const { connection } = await mongoose.connect(dbUrl);
     const url = `${connection.host}:${connection.port}`;
-
     console.log(colors.cyan.bold(`Mongo db conectado en ${url}`));
   } catch (error) {
     if (error instanceof Error)
