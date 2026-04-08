@@ -1,4 +1,6 @@
 import { Router } from "express";
+import { body } from "express-validator";
+import { UserController } from "./controllers/userController";
 
 const router = Router();
 
@@ -8,10 +10,11 @@ router.get("/", (req, res) => {
 });
 
 // AUTH and register
-router.post("/auth/register", (req, res) => {
-  res.json({ data: "huebos" });
-  console.log(req.body);
-});
+router.post(
+  "/auth/register",
+  body("name").notEmpty().withMessage("El nombre es requerido"),
+  UserController.createUser,
+);
 
 router.get("/blog", (req, res) => {
   res.send("Hola blog");
