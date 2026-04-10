@@ -26,6 +26,8 @@ router.post(
     .withMessage("Password is required")
     .isLength({ min: 8 })
     .withMessage("Password must be at least 8 characters long"),
+
+  body("handle").notEmpty().withMessage("Handle is required"),
   handleInputErrors,
   UserController.createUser,
 );
