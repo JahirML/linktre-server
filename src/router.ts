@@ -5,11 +5,6 @@ import { handleInputErrors } from "./middlewares/validation";
 
 const router = Router();
 
-// auth
-router.get("/", (req, res) => {
-  res.send("Hola mundo express");
-});
-
 // AUTH and register
 router.post(
   "/auth/register",
