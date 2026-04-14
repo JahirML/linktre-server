@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
-import { hashPassword } from "../utils/auth";
+import { checkPassword, hashPassword } from "../utils/auth";
 import slugify from "slugify";
 
 export class UserController {
@@ -30,5 +30,23 @@ export class UserController {
       if (error instanceof Error)
         res.status(400).json({ error: error.message });
     }
+  }
+
+  static async login(req: Request, res: Response) {
+    const { email, password } = req.body;
+
+    const userExist = await User.findOne({ email });
+
+    if (!userExist) {
+      const error = new Error("This user does not exist");
+      return res.status(404).json({ error: error.message });
+    }
+    const isPasswordCorrect = await checkPassword(password, userExist.password);
+    if (!isPasswordCorrect) {
+      const error = new Error("The password is incorrect");
+      return res.status(401).json({ error: error.message });
+    }
+
+    res.send("Login succesfully");
   }
 }
