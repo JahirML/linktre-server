@@ -32,7 +32,17 @@ router.post(
   UserController.createUser,
 );
 
-router.get("/blog", (req, res) => {
-  res.send("Hola blog");
-});
+router.post(
+  "/auth/login",
+  body("email")
+    .notEmpty()
+    .withMessage("Email is required")
+    .isEmail()
+    .withMessage("Invalid email format"),
+
+  body("password").notEmpty().withMessage("Password is required"),
+
+  handleInputErrors,
+  UserController.login,
+);
 export default router;
