@@ -11,13 +11,13 @@ export class UserController {
     const userExist = await User.findOne({ email });
 
     if (userExist) {
-      const error = new Error("This user already exists");
+      const error = new Error("Este usuario ya esta registrado");
       return res.status(409).json({ error: error.message });
     }
     const handle = slugify(req.body.handle, "");
     const handleExists = await User.findOne({ handle });
     if (handleExists) {
-      const error = new Error("This handle is already taken");
+      const error = new Error("Este handle ya esta en uso");
       return res.status(409).json({ error: error.message });
     }
 
@@ -38,12 +38,12 @@ export class UserController {
     const userExist = await User.findOne({ email });
 
     if (!userExist) {
-      const error = new Error("This user does not exist");
+      const error = new Error("El usuario no existe");
       return res.status(404).json({ error: error.message });
     }
     const isPasswordCorrect = await checkPassword(password, userExist.password);
     if (!isPasswordCorrect) {
-      const error = new Error("The password is incorrect");
+      const error = new Error("Contraseña incorrecta");
       return res.status(401).json({ error: error.message });
     }
 
