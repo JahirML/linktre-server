@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { checkPassword, hashPassword } from "../utils/auth";
 import slugify from "slugify";
+import { generateJWT } from "../utils/jwt";
 
 export class UserController {
   static async createUser(req: Request, res: Response) {
@@ -35,18 +36,19 @@ export class UserController {
   static async login(req: Request, res: Response) {
     const { email, password } = req.body;
 
-    const userExist = await User.findOne({ email });
+    const user = await User.findOne({ email });
 
-    if (!userExist) {
+    if (!user) {
       const error = new Error("El usuario no existe");
       return res.status(404).json({ error: error.message });
     }
-    const isPasswordCorrect = await checkPassword(password, userExist.password);
+    const isPasswordCorrect = await checkPassword(password, user.password);
     if (!isPasswordCorrect) {
       const error = new Error("Contraseña incorrecta");
       return res.status(401).json({ error: error.message });
     }
 
-    res.send("Login succesfully");
+    const token = generateJWT({ id: user._id });
+    res.send(token);
   }
 }
