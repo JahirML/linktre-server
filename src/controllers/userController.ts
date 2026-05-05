@@ -51,4 +51,9 @@ export class UserController {
     const token = generateJWT({ id: user._id });
     res.send(token);
   }
+
+  static async getUser(req: Request, res: Response) {
+    const user = req.user;
+    res.status(200).json(user);
+  }
 }

@@ -1,3 +1,4 @@
+import { authenticate } from "./middlewares/auth";
 import { Router } from "express";
 import { body } from "express-validator";
 import { UserController } from "./controllers/userController";
@@ -40,4 +41,8 @@ router.post(
   handleInputErrors,
   UserController.login,
 );
+
+// router.use("/:userId", authenticate);
+router.get("/user", authenticate, UserController.getUser);
+
 export default router;
