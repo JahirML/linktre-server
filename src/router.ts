@@ -45,4 +45,13 @@ router.post(
 // router.use("/:userId", authenticate);
 router.get("/user", authenticate, UserController.getUser);
 
+router.patch(
+  "/user",
+  body("handle").notEmpty().withMessage("Handle is required"),
+  body("description").notEmpty().withMessage("Description is required"),
+  handleInputErrors,
+  authenticate,
+  UserController.updateProfile,
+);
+
 export default router;

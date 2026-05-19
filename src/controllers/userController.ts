@@ -56,4 +56,27 @@ export class UserController {
     const user = req.user;
     res.status(200).json(user);
   }
+
+  static async updateProfile(req: Request, res: Response) {
+    try {
+      const { description, handle } = req.body;
+
+      const handleExists = await User.findOne({ handle });
+      if (handleExists && handleExists.email !== req.user?.email) {
+        const error = new Error("Nombre de usuario no disponible");
+        return res.status(409).json({ error: error.message });
+      }
+      if (!req.user)
+        return res.status(404).json({ error: "Usuario no encontrado" });
+
+      req.user.description = description;
+      req.user.handle = handle;
+
+      await req.user.save();
+      res.send("Perfil actualizado correctamente");
+    } catch (error) {
+      const err = new Error("Hubo un error");
+      return res.status(500).json({ error: err.message });
+    }
+  }
 }
